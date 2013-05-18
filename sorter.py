@@ -1,14 +1,31 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 from PIL import Image
 from PIL.ExifTags import TAGS
+import enumerator
 
 def get_exif(fn):
-    ret = {}
-    i = Image.open(fn)
-    info = i._getexif()
-    for tag, value in info.items():
-        decoded = TAGS.get(tag, tag)
-        ret[decoded] = value
-    return ret
+	ret = {}
+	i = Image.open(fn)
+	try:
+		info = i._getexif();
+	except AttributeError:
+		return ret
+		
+	if info == None:
+		return ret
+	for tag, value in info.items():
+		decoded = TAGS.get(tag, tag)
+		ret[decoded] = value
+	return ret
 
-info = get_exif("2013/02/21/IMG_20130221_200550.jpg");
-print info['DateTimeOriginal']
+for filename in enumerator.enumerate('/home/mpv'):
+	print filename
+	try:
+		info = get_exif(filename)
+		if info.has_key('DateTimeOriginal'):
+			print info['DateTimeOriginal']
+		else:
+			print 'No date in EXIF'
+	except IOError:
+		print 'no EXIF'
