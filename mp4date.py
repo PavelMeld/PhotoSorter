@@ -1,23 +1,8 @@
 #!/usr/bin/python
 import sys
 import os
-import movdate
+from videoutils import read_littleend, get_1904_date
 
-########################################################################
-##
-##
-##	Function reads LITTLE endian data into Intel-oriented variables
-##
-##
-########################################################################
-def read_littleend(file, bitsize=32):
-	cnt = bitsize/8
-	data = file.read(cnt);
-	print repr(data)
-	num = 0
-	for n in range(0,cnt):
-		num|=ord(data[n]) << (8*(cnt-1-n))
-	return num;
 ########################################################################
 ##
 ##
@@ -69,7 +54,7 @@ def trace_box(handle, stop_pos = None):
 				time = read_littleend(handle, 32)
 			else:
 				time = read_littleend(handle, 64)
-			return time
+			return get_1904_date(time)
 
 
 
@@ -106,4 +91,4 @@ if __name__ == "__main__":
 	else:
 		res = read_mp4_date(sys.argv[1])
 		if res != None:
-			print movdate.get_1904_date(res)
+			print res
