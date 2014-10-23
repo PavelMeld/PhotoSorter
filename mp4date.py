@@ -39,7 +39,7 @@ def trace_box(handle, stop_pos = None):
 			name = file.read(16)
 			print 'Reading extended name'
 
-		print 'Box {} size {} bytes'.format(name,size)
+		#print 'Box {} size {} bytes'.format(name,size)
 
 		if name=='moov':
 			res = trace_box(handle, box_start+size)
@@ -80,7 +80,7 @@ def read_mp4_date(fileName):
 		print "File '{}' not found".format(fileName)
 		return None;
 
-	print "Reading file '{}'".format(fileName)
+	#print "Reading file '{}'".format(fileName)
 	res = trace_box(h);
 	h.close();
 	return res
