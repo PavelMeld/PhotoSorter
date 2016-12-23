@@ -1,0 +1,16 @@
+diff -r -u ffmpeg-0.6.1_old/ffserver.c ffmpeg-0.6.1/ffserver.c
+--- ffmpeg-0.6.1_old/ffserver.c	2010-05-29 18:41:26.000000000 +0400
++++ ffmpeg-0.6.1/ffserver.c	2016-12-23 10:37:38.130721652 +0300
+@@ -313,6 +313,12 @@
+ static AVLFG random_state;
+ 
+ static FILE *logfile = NULL;
++void ff_url_split(char *proto, int proto_size,
++                  char *authorization, int authorization_size,
++                  char *hostname, int hostname_size,
++                  int *port_ptr,
++                  char *path, int path_size,
++                  const char *url);
+ 
+ /* FIXME: make ffserver work with IPv6 */
+ /* resolve host with also IP address parsing */
