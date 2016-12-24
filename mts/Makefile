@@ -17,13 +17,20 @@ FFMPEG_OPTIONS= \
 			--enable-decoder=pgssub \
 			--enable-protocol=file
 
+ZLIB=./zlib-1.2.8
+ZLIB_TAR=zlib-1.2.8.tar.gz
 
-all: $(FFMPEG)
-	pwd
-	gcc -O3 -L$(FFMPEG)/libavdevice -L$(FFMPEG)/libavformat -L$(FFMPEG)/libavcodec -L$(FFMPEG)/libavutil -I$(FFMPEG) -o avchd2srt-core avchd2srt-core.c -lavutil -lavformat -lavcodec -lz -lavutil -lm
+
+all: $(ZLIB) $(FFMPEG)
+	gcc -O3 -L$(FFMPEG)/libavdevice -L$(FFMPEG)/libavformat -L$(FFMPEG)/libavcodec -L$(FFMPEG)/libavutil -L$(ZLIB)/libz -I$(FFMPEG) -o avchd2srt-core avchd2srt-core.c -lavutil -lavformat -lavcodec -lz -lavutil -lm
 
 $(FFMPEG):
 	tar xf $(FFMPEG_TAR)
 	patch -p0 < ffserver.patch
 	cd $(FFMPEG); ./configure $(FFMPEG_OPTIONS)
 	make -C $(FFMPEG) -j 8
+
+$(ZLIB):
+	tar xf $(ZLIB_TAR)
+	cd $(ZLIB); ./configure
+	make -C $(ZLIB) -j 8
