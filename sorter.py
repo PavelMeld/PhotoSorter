@@ -8,6 +8,7 @@ import os
 import re
 import shutil
 import avidate, movdate, mp4date
+import mtsdate
 
 def getHumanSize(byteSize):
 	if byteSize < 1024: 
@@ -80,7 +81,7 @@ if os.path.exists(destination) == False:
 
 totalBytes = 0
 
-for filename in enumerator.enumerate(sys.argv[1]):
+for filename in enumerator.enumerate(source):
 	name = os.path.basename(filename);
 	ssize = os.path.getsize(filename)
 	totalBytes += ssize
@@ -100,6 +101,8 @@ for filename in enumerator.enumerate(sys.argv[1]):
 		info = movdate.read_mov_date(filename)
 	elif re.search('\.mp4$',ext,re.I):
 		info = mp4date.read_mp4_date(filename)
+	elif re.search('\.mts$',ext,re.I):
+		info = mtsdate.read_mts_date(filename)
 
 	if info == None:
 		dst = 'NOT_DATED';

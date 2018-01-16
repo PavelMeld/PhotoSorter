@@ -15,18 +15,24 @@ USUAL_YEAR_SECONDS = (365*24*60*60)
 month_days = [31,28,31,30,31,30,31,31,30,31,30,31];
 #	           J   F  M  A  M Jn Jl  A  S  O  N  D
 
-def get_1904_date(seconds):
+def get_1904_date(seconds, verbose = False):
 
 	y = 1904;
 	leap = 0;			# 1904 was a leap year
 
 	while True:
-		if leap == 0:
-			year_seconds = LEAP_YEAR_SECONDS;
+		if leap == 0: 
+			if  y % 100 == 0:
+				if y % 400 == 0:
+					year_seconds = LEAP_YEAR_SECONDS;
+				else:
+					year_seconds = USUAL_YEAR_SECONDS;
+			else:
+				year_seconds = LEAP_YEAR_SECONDS;
 		else:
 			year_seconds = USUAL_YEAR_SECONDS;
 
-		if seconds>=LEAP_YEAR_SECONDS:
+		if seconds >= year_seconds:
 			if leap == 0:
 				leap = 3;
 			else:
@@ -48,9 +54,21 @@ def get_1904_date(seconds):
 
 		d = seconds/(24*60*60);
 
+		seconds -= d * (24*60*60);
+
+		hh = seconds / (60*60)
+		seconds -= hh * 60 * 60
+		mm = seconds / 60 
+		seconds -= mm * 60;
+			
 		break;
 
-	return "{:04}_{:02}_{:02}".format(y,m+1,d+1)
+	string =  "{:04}_{:02}_{:02}".format(y,m+1,d+1)
+
+	if verbose :
+		print "{} {:02}_{:02}_{:02}".format(string, hh,mm,seconds);
+		
+	return string;
 
 ########################################################################
 ##

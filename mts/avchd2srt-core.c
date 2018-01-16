@@ -79,7 +79,7 @@ static void set_srt_hmsm() {
 }
 
 static void print_one_srt_entry() {
-	printf("%s\n", srtT);
+	printf("%s", srtT);
 //  set_srt_hmsm();
 //  fprintf(filesrt, "%0d\n", srt+1);
 //  fprintf(filesrt, "%02d:%02d:%02d,%03d --> ", srtH, srtM, srtS, srtmS);
@@ -339,7 +339,7 @@ int main(int argc, char *argv[]) {
               t.tm_isdst = 0;
               secsince1970 = mktime(&t);
 
-			  srtTni += sprintf(srtTn  + srtTni, "%i_%i_%i", year, month, day);
+			  srtTni += sprintf(srtTn  + srtTni, "%04i_%02i_%02i", year, month, day);
 
               // srtTni += snprintf(&(srtTn[srtTni]), 40, "%s %02d-%s-%04d %02d:%02d:%02d", 
               //                    weekday[t.tm_wday],
