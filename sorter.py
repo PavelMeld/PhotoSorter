@@ -111,15 +111,29 @@ for filename in enumerator.enumerate(source):
 	else:
 		dst = info;
 
-	fulldest = os.path.join(destination, dst, name)
-	destdir = os.path.join(destination, dst)
+	original_dest_dir = os.path.join(destination, dst)
+	candidates = get_candidate_dirs(destination, dst);
+	candidates.append(original_dest_dir);
+
+	for testdir in candidates:
+		testdest = os.path.join(destination, testdir, name)
+		if os.path.exists(testdest) == False:
+			continue;
+		dsize = os.path.getsize(fulldest)
+		if ssize == dsize:
+			print 'File exists'
+			break;
+	else:
+		destdir = original_dest_dir;
+			
+	fulldest = os.path.join(destination, dirname, name)
 
 	print name,'->',fulldest, '(', getHumanSize(ssize),')'
-
 	if os.path.exists(destdir) == False:
 		print 'Creating directory ...'
 		os.mkdir(destdir)
 
+	# 2. If File not found within candidates 
 	n = 0
 	while True:
 		if os.path.exists(fulldest) == False:
@@ -127,7 +141,6 @@ for filename in enumerator.enumerate(source):
 			shutil.copy(filename, fulldest)
 			break;
 
-		ssize = os.path.getsize(filename)
 		dsize = os.path.getsize(fulldest)
 
 		if ssize == dsize:
