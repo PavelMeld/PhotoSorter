@@ -32,13 +32,24 @@ def getHumanSize(byteSize):
 #
 #
 ################################################################################
-def file_exists(dest_dir, fname, fsize):
-    testdest = os.path.join(dest_dir, fname)
-    if os.path.exists(testdest) == False:
-        return False;
-    dsize = os.path.getsize(testdest)
-    if fsize == dsize:
-        return True;
+def file_exists(dest_dir, fname, fext, fsize):
+    suff = "";
+    n = 0;
+    while True:
+        testdest = os.path.join(dest_dir, fname + suff + fext)
+
+        if os.path.exists(testdest) == False:
+            return False;
+
+
+        dsize = os.path.getsize(testdest)
+        if fsize == dsize:
+            print "File exists";
+            return True;
+
+        suff = "_" + str(n);
+        n = n + 1;
+
     return False;
 
 ################################################################################
@@ -145,7 +156,7 @@ for filename in enumerator.enumerate_media_files(source):
     print filename,
 
     for testdir in candidates:
-        if file_exists(testdir, name, file_size):
+        if file_exists(testdir, namestart, ext, file_size):
             print "found in " + testdir;
             break;
     else:
