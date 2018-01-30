@@ -9,6 +9,7 @@ import re
 import shutil
 import avidate, movdate, mp4date
 import mtsdate
+import argparse
 
 def getHumanSize(byteSize):
     if byteSize < 1024: 
@@ -97,12 +98,17 @@ def get_exif(fn):
     return res
 
 
-if len(sys.argv)!=3:
-    print "Usage: sorter.py <source> <destination>"
-    sys.exit();
+cmd = argparse.ArgumentParser(description='PhotoSorter')
+cmd.add_argument("-m", "--mode", default="copy", choices=['copy', 'test']);
+cmd.add_argument("source");
+cmd.add_argument("destination");
 
-source          = sys.argv[1];
-destination     = sys.argv[2];
+args = cmd.parse_args();
+print args
+
+source          = args.source;
+destination     = args.destination
+mode            = args.mode;
 
 print "Source      path '",source,"'";
 print "Destination path '",destination,"'";
@@ -112,9 +118,10 @@ if os.path.exists(source) == False:
     print "Source dir", source," not exists!"
     sys.exit();
 
-if os.path.exists(destination) == False:
-    print "Destination dir", destination," not exists!"
-    sys.exit();
+if mode != 'test':
+    if os.path.exists(destination) == False:
+        print "Destination dir", destination," not exists!"
+        sys.exit();
 
 totalBytes = 0
 
@@ -149,11 +156,15 @@ for filename in enumerator.enumerate_media_files(source):
     else:
         dst = info;
 
+
     default_dest_dir = os.path.join(destination, dst)
     candidates       = get_candidate_dirs(destination, dst);
     candidates.append(default_dest_dir);
 
     print filename,
+
+    if mode == 'test':
+        print " testing", 
 
     for testdir in candidates:
         if file_exists(testdir, namestart, ext, file_size):
@@ -162,6 +173,10 @@ for filename in enumerator.enumerate_media_files(source):
     else:
         # Copying
         fulldest = os.path.join(default_dest_dir, name)
+
+        if mode == 'test':
+            print " skipped"
+            continue;
 
         print '->',fulldest, '(', getHumanSize(file_size),')'
 
