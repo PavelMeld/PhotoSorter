@@ -22,7 +22,7 @@ ZLIB_TAR=zlib-1.2.8.tar.gz
 
 
 all: $(ZLIB) $(FFMPEG)
-	gcc -O3 -L$(FFMPEG)/libavdevice -L$(FFMPEG)/libavformat -L$(FFMPEG)/libavcodec -L$(FFMPEG)/libavutil -L$(ZLIB)/libz -I$(FFMPEG) -o avchd2srt-core avchd2srt-core.c -lavutil -lavformat -lavcodec -lz -lavutil -lm
+	gcc -O3 -L$(FFMPEG)/libavdevice -L$(FFMPEG)/libavformat -L$(FFMPEG)/libavcodec -L$(FFMPEG)/libavutil -L$(ZLIB) -I$(FFMPEG) -o avchd2srt-core avchd2srt-core.c -lavutil -lavformat -lavcodec -lz -lavutil -lm
 
 $(FFMPEG):
 	tar xf $(FFMPEG_TAR)
